@@ -147,7 +147,7 @@ class NetworkStuff:
 
         print(f'training will compute on: {self.device}')
 
-        # iters = 0
+        iters = 0
 
         if load:
             self.load_data()
@@ -230,18 +230,17 @@ class NetworkStuff:
                     tqdm.write('[%d/%d][%d/%d]\tLoss_D: %.4f\tLoss_G: %.4f\tD(x): %.4f\tD(G(z)): %.4f / %.4f'
                                % (epoch, self.num_epochs, i, len(self.dataloader),
                                   err_d.item(), err_g.item(), d_x, d_g_z1, d_g_z2))
-                    with torch.no_grad():
-                        fake = self.netG(self.fixed_noise).detach().cpu()
-                    self.img_list.append(vutils.make_grid(fake, padding=2, normalize=True))
 
                 # Save Losses for plotting later
                 self.G_losses.append(err_g.item())
                 self.D_losses.append(err_d.item())
 
                 # Check how the generator is doing by saving G's output on fixed_noise
-                # if (iters % 500 == 0) or ((epoch == self.num_epochs - 1) and (i == len(self.dataloader) - 1)):
-                #
-                # iters += 1
+                if (iters % 500 == 0) or ((epoch == self.num_epochs - 1) and (i == len(self.dataloader) - 1)):
+                    with torch.no_grad():
+                        fake = self.netG(self.fixed_noise).detach().cpu()
+                    self.img_list.append(vutils.make_grid(fake, padding=2, normalize=True))
+                iters += 1
 
             self.save_model()
             self.save_data()
@@ -356,7 +355,10 @@ class NetworkStuff:
 
             fig = plt.figure(figsize=(8, 8))
             plt.axis("off")
-            ims = [[plt.imshow(np.transpose(i, (1, 2, 0)), animated=True)] for i in self.img_list]
+
+            ims = [[plt.title(f'epoch n. {index}'), plt.imshow(np.transpose(pic, (1, 2, 0)), animated=True)]
+                   for index, pic in enumerate(self.img_list)]
+
             ani = animation.ArtistAnimation(fig, ims, interval=1000, repeat_delay=1000, blit=True)
 
             if file_name is None:
