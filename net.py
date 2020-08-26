@@ -371,7 +371,7 @@ class NetworkStuff:
         else:
             print('Images list is empty', '\n')
 
-    def show_samples(self, num=64):
+    def show_samples(self, num=64, file_name=None):
         real_batch = next(iter(self.dataloader))
 
         # Plot real images
@@ -391,6 +391,10 @@ class NetworkStuff:
         plt.imshow(
             np.transpose(vutils.make_grid(fake[:num], padding=2, normalize=True), (1, 2, 0)))
 
+        if file_name is None:
+            file_name = self.file_name
+
+        plt.savefig(os.path.join('pics', file_name + 'generated-pics.png'))
         plt.show()
 
     @staticmethod
