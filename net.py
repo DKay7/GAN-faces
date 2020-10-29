@@ -86,7 +86,7 @@ class NetworkStuff:
                  beta1=0.5,
                  image_size=64,
                  batch_size=128,
-                 nc=3,
+                 nc=1,  # 3,  # TODO: поменять обратно здесь на 3
                  ndf=64,
                  nz=100,
                  ngf=64):
@@ -95,14 +95,24 @@ class NetworkStuff:
         random.seed(manual_seed)
         torch.manual_seed(manual_seed)
 
-        self.dataset = dset.ImageFolder(
-            root=dataroot,
+        # self.dataset = dset.ImageFolder(
+        #     root=dataroot,
+        #     transform=transforms.Compose([
+        #         transforms.Resize(image_size),
+        #         transforms.CenterCrop(image_size),
+        #         transforms.ToTensor(),
+        #         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        #     ])
+        # )
+        # TODO: поменять обратно и здесь
+        self.dataset = torchvision.datasets.MNIST(
+            root=os.path.abspath("data"), train=True, download=True,
             transform=transforms.Compose([
-                transforms.Resize(image_size),
-                transforms.CenterCrop(image_size),
-                transforms.ToTensor(),
-                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-            ])
+                        transforms.Resize(image_size),
+                        transforms.CenterCrop(image_size),
+                        transforms.ToTensor(),
+                        transforms.Normalize((0.5,), (0.5,))
+                    ])
         )
 
         self.dataloader = torch.utils.data.DataLoader(

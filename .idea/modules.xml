@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/gan.iml" filepath="$PROJECT_DIR$/.idea/gan.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/GAN-faces.iml" filepath="$PROJECT_DIR$/.idea/GAN-faces.iml" />
     </modules>
   </component>
 </project>
